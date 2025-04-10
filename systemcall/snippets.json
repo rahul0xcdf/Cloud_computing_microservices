@@ -1,0 +1,31 @@
+{
+    "fork": {
+      "default": {
+        "code": "#include <stdio.h>\\n#include <unistd.h>\\n\\nint main() {\\n    pid_t pid = fork();\\n    if (pid < 0) {\\n        perror(\\\"fork failed\\\");\\n        return 1;\\n    } else if (pid == 0) {\\n        printf(\\\"Child process. PID: %d\\\\n\\\", getpid());\\n    } else {\\n        printf(\\\"Parent process. Child PID: %d\\\\n\\\", pid);\\n    }\\n    return 0;\\n}",
+        "explanation": "The fork() system call creates a new process by duplicating the calling process.",
+        "potential_output": "Parent process. Child PID: 1234\\nChild process. PID: 1234"
+      }
+    },
+    "open": {
+      "default": {
+        "code": "#include <fcntl.h>\\n#include <stdio.h>\\n#include <unistd.h>\\n\\nint main() {\\n    int fd = open(\\\"example.txt\\\", O_RDONLY);\\n    if (fd == -1) {\\n        perror(\\\"open failed\\\");\\n        return 1;\\n    }\\n    printf(\\\"File opened successfully. FD: %d\\\\n\\\", fd);\\n    close(fd);\\n    return 0;\\n}",
+        "explanation": "open() opens the file 'example.txt' in read-only mode.",
+        "potential_output": "File opened successfully. FD: 3"
+      }
+    },
+    "read": {
+      "default": {
+        "code": "#include <fcntl.h>\\n#include <unistd.h>\\n#include <stdio.h>\\n\\nint main() {\\n    char buffer[100];\\n    int fd = open(\\\"example.txt\\\", O_RDONLY);\\n    if (fd == -1) {\\n        perror(\\\"open failed\\\");\\n        return 1;\\n    }\\n    int bytes = read(fd, buffer, sizeof(buffer) - 1);\\n    if (bytes == -1) {\\n        perror(\\\"read failed\\\");\\n        return 1;\\n    }\\n    buffer[bytes] = '\\\\0';\\n    printf(\\\"Read %d bytes: %s\\\\n\\\", bytes, buffer);\\n    close(fd);\\n    return 0;\\n}",
+        "explanation": "read() reads content from 'example.txt' into a buffer and prints it.",
+        "potential_output": "Read 20 bytes: Hello from file..."
+      }
+    },
+    "wait": {
+      "default": {
+        "code": "#include <sys/types.h>\\n#include <sys/wait.h>\\n#include <unistd.h>\\n#include <stdio.h>\\n\\nint main() {\\n    pid_t pid = fork();\\n    if (pid == 0) {\\n        printf(\\\"Child: Doing work...\\\\n\\\");\\n        return 42;\\n    } else {\\n        int status;\\n        wait(&status);\\n        if (WIFEXITED(status)) {\\n            printf(\\\"Parent: Child exited with code %d\\\\n\\\", WEXITSTATUS(status));\\n        }\\n    }\\n    return 0;\\n}",
+        "explanation": "wait() pauses the parent until the child exits, and retrieves the exit code.",
+        "potential_output": "Child: Doing work...\\nParent: Child exited with code 42"
+      }
+    }
+  }
+  
