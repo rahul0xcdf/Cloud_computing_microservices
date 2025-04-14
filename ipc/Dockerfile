@@ -3,7 +3,13 @@ FROM gcc:latest
 WORKDIR /app
 COPY . .
 
-RUN apt update && apt install -y python3-pip
-RUN pip3 install fastapi uvicorn
+RUN apt update && apt install -y python3-pip python3-venv
+
+# Create and activate virtual environment
+RUN python3 -m venv /app/venv
+ENV PATH="/app/venv/bin:$PATH"
+
+# Install Python packages in virtual environment
+RUN pip install fastapi uvicorn
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
