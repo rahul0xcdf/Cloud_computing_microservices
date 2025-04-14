@@ -9,6 +9,9 @@ RUN apt update && apt install -y python3-pip python3-venv
 RUN python3 -m venv /app/venv
 ENV PATH="/app/venv/bin:$PATH"
 
+# Make run_sim.sh executable
+RUN chmod +x run_sim.sh
+
 # Install Python packages in virtual environment
 RUN pip install fastapi uvicorn
 
